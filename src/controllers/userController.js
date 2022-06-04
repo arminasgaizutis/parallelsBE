@@ -1,7 +1,7 @@
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const asyncHandler = require('express-async-handler');
-const User = require('../models/userModel');
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+const asyncHandler = require("express-async-handler");
+const User = require("../models/userModel");
 
 //REGISTRATION
 const registerUser = asyncHandler(async (req, res) => {
@@ -9,7 +9,17 @@ const registerUser = asyncHandler(async (req, res) => {
 
   if (!username || !email || !password) {
     res.status(400);
-    throw new Error('Please add all fields');
+    throw new Error("Please add all fields");
+  }
+
+  if (password.length < 5) {
+    res.status(400);
+    throw new Error("Password is too short, min 5 characters");
+  }
+
+  if (username.length < 3) {
+    res.status(400);
+    throw new Error("Username is too short min 3 characters");
   }
 
   // Cheking if user exist here
@@ -17,7 +27,14 @@ const registerUser = asyncHandler(async (req, res) => {
 
   if (userExists) {
     res.status(400);
-    throw new Error('User already exists');
+    throw new Error("User already exists");
+  }
+
+  const usernameExists = await User.findOne({ username });
+
+  if (usernameExists) {
+    res.status(400);
+    throw new Error("Username already taken");
   }
 
   // Hash password
@@ -34,13 +51,11 @@ const registerUser = asyncHandler(async (req, res) => {
   if (user) {
     res.status(201).json({
       _id: user.id,
-      username: user.username,
-      email: user.email,
       token: generateToken(user._id),
     });
   } else {
     res.status(400);
-    throw new Error('Invalid user data');
+    throw new Error("Invalid user data");
   }
 });
 
@@ -60,7 +75,7 @@ const loginUser = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(400);
-    throw new Error('Invalid credentials');
+    throw new Error("Invalid credentials");
   }
 });
 
@@ -72,7 +87,7 @@ const getUserData = asyncHandler(async (req, res) => {
 // Generate JsonWebToken
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: '1d',
+    expiresIn: "1d",
   });
 };
 

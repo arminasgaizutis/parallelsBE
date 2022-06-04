@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 const {
   getAllPosts,
@@ -6,12 +6,12 @@ const {
   updatePost,
   deletePost,
   getMyPosts,
-} = require('../controllers/postController');
+} = require("../controllers/postController");
 
-const { protect } = require('../middleware/authMiddleware');
+const { protect } = require("../middleware/authMiddleware");
 
-router.route('/').get(protect, getMyPosts).post(protect, createPost);
-router.route('/memorybox').get(protect, getAllPosts);
-router.route('/:id').put(protect, updatePost).delete(protect, deletePost);
+router.route("/").get(protect, getAllPosts).post(protect, createPost);
+router.route("/my-posts").get(protect, getMyPosts);
+router.route("/:id").put(protect, updatePost).delete(protect, deletePost);
 
 module.exports = router;
