@@ -1,15 +1,19 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const PostSchema = mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: 'User',
+      ref: "User",
     },
     text: {
       type: String,
-      required: [true, 'Cannot leave this blank'],
+      required: [true, "Cannot leave this blank"],
+    },
+    keywords: {
+      type: String,
+      required: [true, "Cannot leave this blank"],
     },
     img: {
       type: String,
@@ -20,4 +24,4 @@ const PostSchema = mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model('Post', PostSchema);
+module.exports = mongoose.model("Post", PostSchema);

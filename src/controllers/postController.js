@@ -1,7 +1,7 @@
-const asyncHandler = require('express-async-handler');
+const asyncHandler = require("express-async-handler");
 
-const Post = require('../models/postModel');
-const User = require('../models/userModel');
+const Post = require("../models/postModel");
+const User = require("../models/userModel");
 
 //GET ALL POSTS
 const getAllPosts = asyncHandler(async (req, res) => {
@@ -21,7 +21,7 @@ const getMyPosts = asyncHandler(async (req, res) => {
 const createPost = asyncHandler(async (req, res) => {
   if (!req.body.text) {
     res.status(400);
-    throw new Error('Please fill in text field');
+    throw new Error("Please fill in text field");
   }
 
   const post = await Post.create({
@@ -37,17 +37,17 @@ const updatePost = asyncHandler(async (req, res) => {
   const post = await Post.findById(req.params.id);
   if (!post) {
     res.status(400);
-    throw new Error('Post not found');
+    throw new Error("Post not found");
   }
   // Checking for user
   if (!req.user) {
     res.status(401);
-    throw new Error('User not found');
+    throw new Error("User not found");
   }
   // Making sure the logged in user matches the post user
   if (post.user.toString() !== req.user.id) {
     res.status(401);
-    throw new Error('User not authorized');
+    throw new Error("User not authorized");
   }
 
   const updatedPost = await Post.findByIdAndUpdate(req.params.id, req.body, {
@@ -62,17 +62,17 @@ const deletePost = asyncHandler(async (req, res) => {
   const post = await Post.findById(req.params.id);
   if (!post) {
     res.status(400);
-    throw new Error('Post not found');
+    throw new Error("Post not found");
   }
   // Checking for user
   if (!req.user) {
     res.status(401);
-    throw new Error('User not found');
+    throw new Error("User not found");
   }
   // Making sure the logged in user matches the post user
   if (post.user.toString() !== req.user.id) {
     res.status(401);
-    throw new Error('User not authorized');
+    throw new Error("User not authorized");
   }
 
   await post.remove();
